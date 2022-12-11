@@ -13,10 +13,10 @@ export class FormComponent implements OnInit {
   @Input() patchValues?: any;
   @Output() onClick: EventEmitter<any> = new EventEmitter<any>();
   isSubmitted: boolean = false;
-  constructor(private fb: FormBuilder,private _httpClient: HttpClient) { }
+  constructor(private fb: FormBuilder, private _httpClient: HttpClient) { }
   ngOnChanges(simpleChanges: any) {
     if (simpleChanges.patchValues?.currentValue) {
-      this.patchFormValue(simpleChanges.patchValues?.currentValue)
+      //this.patchFormValue(simpleChanges.patchValues?.currentValue)
     }
   }
   ngOnInit(): void {
@@ -31,13 +31,15 @@ export class FormComponent implements OnInit {
       ...this.createForm(),
     })
     this.getData();
+    this.patchFormValue(this.patchValues)
   }
   handleSelectChange(event: any) {
+    debugger;
     let id = event.target.id;
     let value = event.target.value;
     let crtl = this.configration.find(config => config.dependsOn == id && config.inputType == InputType.InputSelect)!;
-    this.formName.controls[crtl.controlName].setValue(null);
     if (crtl) {
+      this.formName.controls[crtl.controlName].setValue(null);
       this._httpClient.get(crtl.dataUrl + `${value}`).subscribe((response: any) => {
         crtl.optionValues = response.map((trans: any) => {
           return {
@@ -101,14 +103,15 @@ export class FormComponent implements OnInit {
     }
   }
   patchFormValue(values: any) {
-    this.formName.patchValue(values)
+    console.log(values);
+    this.formName.patchValue(values);
   }
   handleFileChange(event: any) {
     let sibling = event.target.nextSibling;
-    this.fileToBase64(event.target.files[0]).then((x:any) => {
-      sibling.setAttribute('src',x.base64);
-      sibling.setAttribute('width',80);
-      sibling.setAttribute('height',80);
+    this.fileToBase64(event.target.files[0]).then((x: any) => {
+      sibling.setAttribute('src', x.base64);
+      sibling.setAttribute('width', 80);
+      sibling.setAttribute('height', 80);
     });
   }
   fileToBase64 = async (file: any) =>

@@ -1,125 +1,119 @@
-<div class="container mt-5">
-    <div class="row justify-content-center">
-      <div class="col-12">
-        <h3>Dynamic Form</h3>
-        {{formName.value | json}}
-        <form [formGroup]="formName" (submit)="handleSubmit()">
-          <div class="row">
-            <ng-container *ngFor="let control of configration;let index=index">
-              <div [class]="control.class">
-                <ng-container *ngIf="control.inputType == inputType.InputHidden">
-                  <input type="hidden" [formControlName]="control.controlName" />
-                </ng-container>
-                <ng-container *ngIf="control.inputType == inputType.InputText">
-                  <div class="mb-3">
-                    <label for="inputText{{index}}">{{control.labelName}}</label>
-                    <input [id]="'inputText'+index" class="form-control" type="text" [formControlName]="control.controlName"
-                           placeholder="Enter {{control.labelName}}" />
-                    <ng-container *ngIf="f[control.controlName]?.errors">
-                      <ng-container *ngIf="(f[control.controlName]?.invalid  && (f[control.controlName]?.dirty || f[control.controlName]?.touched)) || isSubmitted">
-                        <span class="text-danger" *ngIf="f[control.controlName]?.errors?.['required']">Input is required</span>
-                        <span class="text-danger" *ngIf="f[control.controlName]?.errors?.['maxlength']">
-                          Input allows maximum {{f[control.controlName].errors?.['maxlength'].requiredLength}} charcters.
-                        </span>
-                        <span class="text-danger" *ngIf="f[control.controlName]?.errors?.['minlength']">
-                          Input required minimum {{f[control.controlName].errors?.['minlength'].requiredLength}} charcters.
-                        </span>
-                      </ng-container>
-                    </ng-container>
-                  </div>
-                </ng-container>
-                <ng-container *ngIf="control.inputType == inputType.InputSelect">
-                  <div class="mb-3">
-                    <label>{{control.labelName}}</label>
-                    <select [id]="control.controlName" [formControlName]="control.controlName" class="form-control" (change)="handleSelectChange($event)">
-                      <option selected [value]="null">---Select {{control.labelName}}---</option>
-                      <option [value]="option.value" *ngFor="let option of control.optionValues">{{option.text}}</option>
-                    </select>
-                    <ng-container *ngIf="f[control.controlName]?.errors">
-                      <ng-container *ngIf="(f[control.controlName]?.invalid  && (f[control.controlName]?.dirty || f[control.controlName]?.touched)) || isSubmitted">
-                        <span class="text-danger" *ngIf="f[control.controlName]?.errors?.['required']">Input is required</span>
-                      </ng-container>
-                    </ng-container>
-                  </div>
-                </ng-container>
-                <ng-container *ngIf="control.inputType == inputType.InputDate">
-                  <div class="mb-3">
-                    <label class="d-block">{{control.labelName}}</label>
-                    <input type="date" class="form-control" [formControlName]="control.controlName" />
-                  </div>
-                </ng-container>
-                <ng-container *ngIf="control.inputType == inputType.InputCheckBox">
-                  <div class="mb-3">
-                    <label for="checkBox{{index}}" class="d-block">{{control.labelName}}</label>
-                    <input [id]="'checkBox'+index" type="checkbox" [formControlName]="control.controlName" />
-                    <ng-container *ngIf="f[control.controlName]?.errors">
-                      <ng-container *ngIf="(f[control.controlName]?.invalid  && (f[control.controlName]?.dirty || f[control.controlName]?.touched)) || isSubmitted">
-                        <span class="text-danger d-block" *ngIf="f[control.controlName]?.errors?.['required']">Input is required</span>
-                      </ng-container>
-                    </ng-container>
-                  </div>
-                </ng-container>
-                <ng-container *ngIf="control.inputType == inputType.InputRadio">
-                  <div class="mb-3">
-                    <label class="d-block">{{control.labelName}}</label>
-                    <ng-container *ngFor="let radio of control.optionValues;let radioIndex=index">
-                      <input [id]="'radio'+radioIndex" [value]="radio.value" type="radio" [formControlName]="control.controlName" />
-                      <label for="radio{{radioIndex}}" class="me-2">{{radio.text}}</label>
-                    </ng-container>
-                    <ng-container *ngIf="f[control.controlName]?.errors">
-                      <ng-container *ngIf="(f[control.controlName]?.invalid  && (f[control.controlName]?.dirty || f[control.controlName]?.touched)) || isSubmitted">
-                        <span class="text-danger d-block" *ngIf="f[control.controlName]?.errors?.['required']">Input is required</span>
-                      </ng-container>
-                    </ng-container>
-                  </div>
-                </ng-container>
-                <ng-container *ngIf="control.inputType == inputType.InputFile">
-                  <div class="mb-3">
-                    <label class="d-block">{{control.labelName}}</label>
-                    <input [id]="'file'+index" type="file" (change)="handleFileChange($event)" class="form-control" [formControlName]="control.controlName" />
-                    <img />
-                  </div>
-                </ng-container>
-              </div>
+
+<form [formGroup]="formName" (submit)="handleSubmit()">
+  <div class="row">
+    <ng-container *ngFor="let control of configration;let index=index">
+      <div [class]="control.class">
+        <ng-container *ngIf="control.inputType == inputType.InputHidden">
+          <input type="hidden" [formControlName]="control.controlName" />
+        </ng-container>
+        <ng-container *ngIf="control.inputType == inputType.InputText">
+          <div class="mb-3">
+            <label for="inputText{{index}}">{{control.labelName}}</label>
+            <input [id]="'inputText'+index" class="form-control" type="text" [formControlName]="control.controlName"
+                   placeholder="Enter {{control.labelName}}" />
+            <ng-container *ngIf="f[control.controlName]?.errors">
+              <ng-container *ngIf="(f[control.controlName]?.invalid  && (f[control.controlName]?.dirty || f[control.controlName]?.touched)) || isSubmitted">
+                <span class="text-danger" *ngIf="f[control.controlName]?.errors?.['required']">Input is required</span>
+                <span class="text-danger" *ngIf="f[control.controlName]?.errors?.['maxlength']">
+                  Input allows maximum {{f[control.controlName].errors?.['maxlength'].requiredLength}} charcters.
+                </span>
+                <span class="text-danger" *ngIf="f[control.controlName]?.errors?.['minlength']">
+                  Input required minimum {{f[control.controlName].errors?.['minlength'].requiredLength}} charcters.
+                </span>
+              </ng-container>
             </ng-container>
           </div>
-          <div class="d-flex justify-content-end">
-            <button type="submit" class="btn btn-success">Submit</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <!-- <form [formGroup]="formName">
-      <ng-container *ngFor="let ct of formName['controls'] | keyvalue;let index=index">
-          <label>{{controls[index].labelName}}</label>
-          <input type="text" [formControlName]="ct.key"/>
-          <ng-container *ngIf="formName.get(ct.key)?.errors">
-              <ng-container *ngIf="formName.get(ct.key)?.invalid  && (formName.get(ct.key)?.dirty || formName.get(ct.key)?.touched)">
-                  <span *ngIf="formName.get(ct.key)?.errors?.required">Input is required</span>
+        </ng-container>
+        <ng-container *ngIf="control.inputType == inputType.InputSelect">
+          <div class="mb-3">
+            <label>{{control.labelName}}</label>
+            <select [id]="control.controlName" [formControlName]="control.controlName" class="form-control" (change)="handleSelectChange($event)">
+              <option selected [value]="null">---Select {{control.labelName}}---</option>
+              <option [value]="option.value" *ngFor="let option of control.optionValues">{{option.text}}</option>
+            </select>
+            <ng-container *ngIf="f[control.controlName]?.errors">
+              <ng-container *ngIf="(f[control.controlName]?.invalid  && (f[control.controlName]?.dirty || f[control.controlName]?.touched)) || isSubmitted">
+                <span class="text-danger" *ngIf="f[control.controlName]?.errors?.['required']">Input is required</span>
               </ng-container>
-          </ng-container>
-      </ng-container>
-  </form> -->
+            </ng-container>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="control.inputType == inputType.InputDate">
+          <div class="mb-3">
+            <label class="d-block">{{control.labelName}}</label>
+            <input type="date" class="form-control" [formControlName]="control.controlName" />
+          </div>
+        </ng-container>
+        <ng-container *ngIf="control.inputType == inputType.InputCheckBox">
+          <div class="mb-3">
+            <label for="checkBox{{index}}" class="d-block">{{control.labelName}}</label>
+            <input [id]="'checkBox'+index" type="checkbox" [formControlName]="control.controlName" />
+            <ng-container *ngIf="f[control.controlName]?.errors">
+              <ng-container *ngIf="(f[control.controlName]?.invalid  && (f[control.controlName]?.dirty || f[control.controlName]?.touched)) || isSubmitted">
+                <span class="text-danger d-block" *ngIf="f[control.controlName]?.errors?.['required']">Input is required</span>
+              </ng-container>
+            </ng-container>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="control.inputType == inputType.InputRadio">
+          <div class="mb-3">
+            <label class="d-block">{{control.labelName}}</label>
+            <ng-container *ngFor="let radio of control.optionValues;let radioIndex=index">
+              <input [id]="'radio'+radioIndex" [value]="radio.value" type="radio" [formControlName]="control.controlName" />
+              <label for="radio{{radioIndex}}" class="me-2">{{radio.text}}</label>
+            </ng-container>
+            <ng-container *ngIf="f[control.controlName]?.errors">
+              <ng-container *ngIf="(f[control.controlName]?.invalid  && (f[control.controlName]?.dirty || f[control.controlName]?.touched)) || isSubmitted">
+                <span class="text-danger d-block" *ngIf="f[control.controlName]?.errors?.['required']">Input is required</span>
+              </ng-container>
+            </ng-container>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="control.inputType == inputType.InputFile">
+          <div class="mb-3">
+            <label class="d-block">{{control.labelName}}</label>
+            <input [id]="'file'+index" type="file" (change)="handleFileChange($event)" class="form-control" [formControlName]="control.controlName" />
+            <img />
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+  </div>
+  <div class="d-flex justify-content-end">
+    <button type="submit" class="btn btn-success">Submit</button>
+  </div>
+</form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <form [formGroup]="formName">
+    <ng-container *ngFor="let ct of formName['controls'] | keyvalue;let index=index">
+        <label>{{controls[index].labelName}}</label>
+        <input type="text" [formControlName]="ct.key"/>
+        <ng-container *ngIf="formName.get(ct.key)?.errors">
+            <ng-container *ngIf="formName.get(ct.key)?.invalid  && (formName.get(ct.key)?.dirty || formName.get(ct.key)?.touched)">
+                <span *ngIf="formName.get(ct.key)?.errors?.required">Input is required</span>
+            </ng-container>
+        </ng-container>
+    </ng-container>
+</form> -->

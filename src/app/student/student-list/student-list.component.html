@@ -1,0 +1,44 @@
+<div class="container mt-5">
+  <div class="p-5 bg-light rounded-3">
+    <div class="mb-4 d-flex align-items-center justify-content-between">
+      <h1 class="text-success">Student List</h1>
+      <a routerLink="/addstudent" class="btn btn-primary">Add New Student</a>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Phone</th>
+              <th>Users</th>
+              <th>Posts</th>
+              <th>Comments</th>
+              <th>Date</th>
+              <th>Gender</th>
+              <th>IsActive</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of studentList">
+              <td>{{item.id}}</td>
+              <td>{{item.firstName}}</td>
+              <td>{{item.lastName}}</td>
+              <td>{{item.phone}}</td>
+              <td>{{item.users}}</td>
+              <td>{{item.posts}}</td>
+              <td>{{item.comments}}</td>
+              <td>{{item.startDate | date:'short'}}</td>
+              <td>{{item.gender}}</td>
+              <td>{{item.isActive}}</td>
+              <td><button class="btn btn-sm btn-warning" (click)="editData(item)">Edit</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
