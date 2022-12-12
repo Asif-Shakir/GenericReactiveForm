@@ -5,5 +5,42 @@
       <a routerLink="/studentlist" class="btn btn-primary">Student List</a>
     </div>
     <app-form [configration]="formControls" [patchValues]="patchValues" (onClick)="getActionData($event)"></app-form>
+    <div class="row mt-5">
+      <div class="col-12">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Phone</th>
+              <th>Users</th>
+              <th>Posts</th>
+              <th>Comments</th>
+              <th>Date</th>
+              <th>Gender</th>
+              <th>IsActive</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of students">
+              <td>{{item.id}}</td>
+              <td>{{item.firstName}}</td>
+              <td>{{item.lastName}}</td>
+              <td>{{item.phone}}</td>
+              <td>{{item.users}}</td>
+              <td>{{item.posts}}</td>
+              <td>{{item.comments}}</td>
+              <td>{{item.startDate | date:'short'}}</td>
+              <td>{{item.gender}}</td>
+              <td>{{item.isActive}}</td>
+              <td><button class="btn btn-sm btn-warning" (click)="editData(item)">Edit</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
   </div>
 </div>

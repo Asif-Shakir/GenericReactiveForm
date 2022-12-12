@@ -12,6 +12,7 @@ export class AddStudentComponent implements OnInit {
   formControls: FormControlOptions[] = [];
   inputType = InputType;
   patchValues: any;
+  students:any = []
   constructor(private _activeRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -21,6 +22,7 @@ export class AddStudentComponent implements OnInit {
       this.patchValues = student;
     })
     this.initControls();
+    this.students = JSON.parse(localStorage.getItem('_students')!);
   }
   initControls() {
     this.formControls = [
@@ -38,17 +40,19 @@ export class AddStudentComponent implements OnInit {
         controlValidatros: [Validators.required], class: 'col-4'
       },
       {
-        inputType: this.inputType.InputSelect, controlName: 'users', labelName: 'Users', controlValidatros: [Validators.required], class: 'col-4'
-        , optionValues: [{ text: 'Lahore', value: '1' }, { text: 'Karachi', value: '2' }, { text: 'Peshawar', value: '3' }],
-        dataUrl: 'https://jsonplaceholder.typicode.com/users', mapByKeys: { text: 'name', value: 'id' }
+        inputType: this.inputType.InputSelect, controlName: 'users', labelName: 'Users', controlValidatros: [Validators.required], class: 'col-4', 
+        dataUrl: 'https://jsonplaceholder.typicode.com/users',
+        mapByKeys: { text: 'name', value: 'id' }
       },
       {
         inputType: this.inputType.InputSelect, controlName: 'posts', labelName: 'Posts', controlValidatros: [Validators.required], class: 'col-4'
         , dependsOn: 'users', dataUrl: 'https://jsonplaceholder.typicode.com/posts?userId=', mapByKeys: { text: 'title', value: 'id' }
+        ,optionValues: []
       },
       {
         inputType: this.inputType.InputSelect, controlName: 'comments', labelName: 'Comments', controlValidatros: [Validators.required], class: 'col-4'
-        , dependsOn: 'posts', dataUrl: 'https://jsonplaceholder.typicode.com/comments?postId=', mapByKeys: { text: 'name', value: 'id' }
+        ,dependsOn: 'posts', dataUrl: 'https://jsonplaceholder.typicode.com/comments?postId=', mapByKeys: { text: 'name', value: 'id' },
+        optionValues: []
       },
       { inputType: this.inputType.InputDate, controlName: 'startDate', labelName: 'Start Date', class: 'col-3' },
       {

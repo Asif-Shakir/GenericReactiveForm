@@ -16,7 +16,8 @@ export class FormComponent implements OnInit {
   constructor(private fb: FormBuilder, private _httpClient: HttpClient) { }
   ngOnChanges(simpleChanges: any) {
     if (simpleChanges.patchValues?.currentValue) {
-      //this.patchFormValue(simpleChanges.patchValues?.currentValue)
+      this.patchFormValue(simpleChanges.patchValues?.currentValue)
+      console.log(this.configration);
     }
   }
   ngOnInit(): void {
@@ -31,10 +32,9 @@ export class FormComponent implements OnInit {
       ...this.createForm(),
     })
     this.getData();
-    this.patchFormValue(this.patchValues)
+    //this.patchFormValue(this.patchValues)
   }
   handleSelectChange(event: any) {
-    debugger;
     let id = event.target.id;
     let value = event.target.value;
     let crtl = this.configration.find(config => config.dependsOn == id && config.inputType == InputType.InputSelect)!;
@@ -103,8 +103,23 @@ export class FormComponent implements OnInit {
     }
   }
   patchFormValue(values: any) {
-    console.log(values);
-    this.formName.patchValue(values);
+    console.log({ values });
+    for (let value in values) {
+      let inputSelect = this.configration.find(config => config.controlName == value && config.inputType == InputType.InputSelect)!;
+      if (inputSelect?.dependsOn) {
+        debugger;
+        this._httpClient.get(inputSelect.dataUrl + values[inputSelect.dependsOn!]).subscribe((response: any) => {
+          inputSelect.optionValues = response.map((trans: any) => {
+            return {
+              text: trans[inputSelect.mapByKeys?.text],
+              value: trans[inputSelect.mapByKeys?.value],
+            }
+          })
+          console.log({ response });
+          this.formName.patchValue(values);
+        })
+      }
+    }
   }
   handleFileChange(event: any) {
     let sibling = event.target.nextSibling;
