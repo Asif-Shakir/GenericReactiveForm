@@ -1,4 +1,3 @@
-
 <form [formGroup]="formName" (submit)="handleSubmit()">
   <div class="row">
     <ng-container *ngFor="let control of configration;let index=index">
@@ -10,9 +9,30 @@
           <div class="mb-3">
             <label for="inputText{{index}}">{{control.labelName}}</label>
             <input [id]="'inputText'+index" class="form-control" type="text" [formControlName]="control.controlName"
-                   placeholder="Enter {{control.labelName}}" />
+              placeholder="Enter {{control.labelName}}" />
             <ng-container *ngIf="f[control.controlName]?.errors">
-              <ng-container *ngIf="(f[control.controlName]?.invalid  && (f[control.controlName]?.dirty || f[control.controlName]?.touched)) || isSubmitted">
+              <ng-container
+                *ngIf="(f[control.controlName]?.invalid  && (f[control.controlName]?.dirty || f[control.controlName]?.touched)) || isSubmitted">
+                <span class="text-danger" *ngIf="f[control.controlName]?.errors?.['required']">Input is required</span>
+                <span class="text-danger" *ngIf="f[control.controlName]?.errors?.['maxlength']">
+                  Input allows maximum {{f[control.controlName].errors?.['maxlength'].requiredLength}} charcters.
+                </span>
+                <span class="text-danger" *ngIf="f[control.controlName]?.errors?.['minlength']">
+                  Input required minimum {{f[control.controlName].errors?.['minlength'].requiredLength}} charcters.
+                </span>
+              </ng-container>
+            </ng-container>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="control.inputType == inputType.InputTextArea">
+          <div class="mb-3">
+            <label for="inputTextArea{{index}}">{{control.labelName}}</label>
+            <textarea [id]="'inputTextArea'+index" class="form-control" [formControlName]="control.controlName"
+              placeholder="Enter {{control.labelName}}">
+            </textarea>
+            <ng-container *ngIf="f[control.controlName]?.errors">
+              <ng-container
+                *ngIf="(f[control.controlName]?.invalid  && (f[control.controlName]?.dirty || f[control.controlName]?.touched)) || isSubmitted">
                 <span class="text-danger" *ngIf="f[control.controlName]?.errors?.['required']">Input is required</span>
                 <span class="text-danger" *ngIf="f[control.controlName]?.errors?.['maxlength']">
                   Input allows maximum {{f[control.controlName].errors?.['maxlength'].requiredLength}} charcters.
@@ -27,12 +47,14 @@
         <ng-container *ngIf="control.inputType == inputType.InputSelect">
           <div class="mb-3">
             <label>{{control.labelName}}</label>
-            <select [id]="control.controlName" [formControlName]="control.controlName" class="form-control" (change)="handleSelectChange($event)">
+            <select [id]="control.controlName" [formControlName]="control.controlName" class="form-control"
+              (change)="handleSelectChange($event)">
               <option selected [value]="null">---Select {{control.labelName}}---</option>
               <option [value]="option.value" *ngFor="let option of control.optionValues">{{option.text}}</option>
             </select>
             <ng-container *ngIf="f[control.controlName]?.errors">
-              <ng-container *ngIf="(f[control.controlName]?.invalid  && (f[control.controlName]?.dirty || f[control.controlName]?.touched)) || isSubmitted">
+              <ng-container
+                *ngIf="(f[control.controlName]?.invalid  && (f[control.controlName]?.dirty || f[control.controlName]?.touched)) || isSubmitted">
                 <span class="text-danger" *ngIf="f[control.controlName]?.errors?.['required']">Input is required</span>
               </ng-container>
             </ng-container>
@@ -49,8 +71,10 @@
             <label for="checkBox{{index}}" class="d-block">{{control.labelName}}</label>
             <input [id]="'checkBox'+index" type="checkbox" [formControlName]="control.controlName" />
             <ng-container *ngIf="f[control.controlName]?.errors">
-              <ng-container *ngIf="(f[control.controlName]?.invalid  && (f[control.controlName]?.dirty || f[control.controlName]?.touched)) || isSubmitted">
-                <span class="text-danger d-block" *ngIf="f[control.controlName]?.errors?.['required']">Input is required</span>
+              <ng-container
+                *ngIf="(f[control.controlName]?.invalid  && (f[control.controlName]?.dirty || f[control.controlName]?.touched)) || isSubmitted">
+                <span class="text-danger d-block" *ngIf="f[control.controlName]?.errors?.['required']">Input is
+                  required</span>
               </ng-container>
             </ng-container>
           </div>
@@ -59,12 +83,15 @@
           <div class="mb-3">
             <label class="d-block">{{control.labelName}}</label>
             <ng-container *ngFor="let radio of control.optionValues;let radioIndex=index">
-              <input [id]="'radio'+radioIndex" [value]="radio.value" type="radio" [formControlName]="control.controlName" />
+              <input [id]="'radio'+radioIndex" [value]="radio.value" type="radio"
+                [formControlName]="control.controlName" />
               <label for="radio{{radioIndex}}" class="me-2">{{radio.text}}</label>
             </ng-container>
             <ng-container *ngIf="f[control.controlName]?.errors">
-              <ng-container *ngIf="(f[control.controlName]?.invalid  && (f[control.controlName]?.dirty || f[control.controlName]?.touched)) || isSubmitted">
-                <span class="text-danger d-block" *ngIf="f[control.controlName]?.errors?.['required']">Input is required</span>
+              <ng-container
+                *ngIf="(f[control.controlName]?.invalid  && (f[control.controlName]?.dirty || f[control.controlName]?.touched)) || isSubmitted">
+                <span class="text-danger d-block" *ngIf="f[control.controlName]?.errors?.['required']">Input is
+                  required</span>
               </ng-container>
             </ng-container>
           </div>
@@ -72,8 +99,9 @@
         <ng-container *ngIf="control.inputType == inputType.InputFile">
           <div class="mb-3">
             <label class="d-block">{{control.labelName}}</label>
-            <input [id]="'file'+index" type="file" (change)="handleFileChange($event)" class="form-control" [formControlName]="control.controlName" />
-            <img />
+            <input [id]="'file'+index" type="file" (change)="handleFileChange($event)" class="form-control"
+              [formControlName]="control.controlName" />
+            <img class="mt-2" />
           </div>
         </ng-container>
       </div>

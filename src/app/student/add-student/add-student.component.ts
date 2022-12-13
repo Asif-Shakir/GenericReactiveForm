@@ -22,7 +22,7 @@ export class AddStudentComponent implements OnInit {
       this.patchValues = student;
     })
     this.initControls();
-    this.students = JSON.parse(localStorage.getItem('_students')!);
+    this.students = this.getList();
   }
   initControls() {
     this.formControls = [
@@ -59,8 +59,9 @@ export class AddStudentComponent implements OnInit {
         inputType: this.inputType.InputRadio, controlName: 'gender', labelName: 'Gender', controlValidatros: [Validators.required],
         optionValues: [{ text: 'Male', value: '1' }, { text: 'Female', value: '2' }], class: 'col-3'
       },
-      //{ inputType: this.inputType.InputFile, controlName: 'fileLogo', labelName: 'Logo', class: 'col-3' },
+      { inputType: this.inputType.InputFile, controlName: 'fileLogo', labelName: 'Logo', class: 'col-3' },
       { inputType: this.inputType.InputCheckBox, controlName: 'isActive', labelName: 'Active', class: 'col-3' },
+      { inputType: this.inputType.InputTextArea, controlName: 'description', labelName: 'Description', class: 'col-12'},
     ];
   }
   editData(item: any) {
@@ -68,18 +69,33 @@ export class AddStudentComponent implements OnInit {
   }
   getActionData(eventData: any) {
     let students: any[] = [];
-    let getData = JSON.parse(localStorage.getItem('_students')!);
-    if (getData) {
-      students = [eventData.data, ...getData];
-      localStorage.setItem("_students", JSON.stringify(students))
+    let getData: any[] = this.getList();
+    if (eventData.data.id > 0) {
+      let item = this.findById(eventData.data.id);
+      if (item) {
+        let index = getData.findIndex((x: any) => x.id == item.id);
+        if (index >= 0) {
+          getData.splice(index, 1, eventData.data)
+          students = [...getData];
+        }
+      }
     }
     else {
-      students.push(eventData.data)
-      localStorage.setItem("_students", JSON.stringify(students))
+      if (getData) {
+        students = [eventData.data, ...getData];
+      }
+      else {
+        students.push(eventData.data)
+      }
     }
+    localStorage.setItem("_students", JSON.stringify(students));
+    this.students = this.getList();
   }
   findById(id: any) {
-    let getData: any[] = JSON.parse(localStorage.getItem('_students')!);
+    let getData: any[] = this.getList();
     return getData.find(x => x.id == id);
+  }
+  getList() {
+    return JSON.parse(localStorage.getItem('_students')!);
   }
 }

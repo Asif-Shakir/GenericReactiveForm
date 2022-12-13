@@ -16,8 +16,9 @@ export class FormComponent implements OnInit {
   constructor(private fb: FormBuilder, private _httpClient: HttpClient) { }
   ngOnChanges(simpleChanges: any) {
     if (simpleChanges.patchValues?.currentValue) {
-      this.patchFormValue(simpleChanges.patchValues?.currentValue)
-      console.log(this.configration);
+      if (!simpleChanges?.patchValues?.firstChange) {
+        this.patchFormValue(simpleChanges.patchValues?.currentValue)
+      }
     }
   }
   ngOnInit(): void {
@@ -32,7 +33,7 @@ export class FormComponent implements OnInit {
       ...this.createForm(),
     })
     this.getData();
-    //this.patchFormValue(this.patchValues)
+    this.patchFormValue(this.patchValues)
   }
   handleSelectChange(event: any) {
     let id = event.target.id;
@@ -83,6 +84,9 @@ export class FormComponent implements OnInit {
         controlValue = '0';
       else if (!control.value && control.inputType == this.inputType.InputFile)
         controlValue = '';
+      else if (!control.value && control.inputType == this.inputType.InputTextArea)
+        controlValue = '';
+      
       controlValue = control.value ? control.value : controlValue;
       let obj = {
         [control.controlName]: [controlValue, control.controlValidatros]
@@ -103,11 +107,9 @@ export class FormComponent implements OnInit {
     }
   }
   patchFormValue(values: any) {
-    console.log({ values });
     for (let value in values) {
       let inputSelect = this.configration.find(config => config.controlName == value && config.inputType == InputType.InputSelect)!;
       if (inputSelect?.dependsOn) {
-        debugger;
         this._httpClient.get(inputSelect.dataUrl + values[inputSelect.dependsOn!]).subscribe((response: any) => {
           inputSelect.optionValues = response.map((trans: any) => {
             return {
@@ -116,6 +118,7 @@ export class FormComponent implements OnInit {
             }
           })
           console.log({ response });
+          console.log(this.formName);
           this.formName.patchValue(values);
         })
       }
@@ -124,12 +127,14 @@ export class FormComponent implements OnInit {
   handleFileChange(event: any) {
     let sibling = event.target.nextSibling;
     this.fileToBase64(event.target.files[0]).then((x: any) => {
+      console.log(x);
       sibling.setAttribute('src', x.base64);
       sibling.setAttribute('width', 80);
       sibling.setAttribute('height', 80);
+      sibling.setAttribute('style','border:2px solid #dadada;object-fit:contain')
     });
   }
-  fileToBase64 = async (file: any) =>
+  fileToBase64 = async (file:File) =>
     new Promise((resolve, reject) => {
       let width: any, height: any;
       const reader = new FileReader()
@@ -138,9 +143,9 @@ export class FormComponent implements OnInit {
         let img = new Image();
         img.src = reader.result?.toString()!;
         img.onload = () => {
-          width = img.width;
+          width = img.width; 
           height = img.height;
-          resolve({ height, width, base64: reader.result })
+          resolve({ size:file.size,height, width, base64: reader.result })
         }
       }
       reader.onerror = (e) => reject(e)
@@ -169,6 +174,7 @@ export interface OptionValues {
 }
 export enum InputType {
   InputText = "InputText",
+  InputTextArea = "InputTextArea",
   InputRadio = "InputRadio",
   InputCheckBox = "InputCheckBox",
   InputSelect = "InputSelect",
