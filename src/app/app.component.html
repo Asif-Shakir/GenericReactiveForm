@@ -1,5 +1,11 @@
 <router-outlet></router-outlet>
 <div class="container">
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <h3 class="text-success mt-5 mb-3">Data Table</h3>
+      <data-table [data]="tableData"></data-table>
+    </div>
+  </div>
   <!--<app-form [configration]="formControls" [patchValues]="patchValues" (onClick)="getActionData($event)"></app-form>-->
 </div>
 

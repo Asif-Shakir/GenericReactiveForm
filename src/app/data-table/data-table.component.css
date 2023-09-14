@@ -1,0 +1,11 @@
+.head-sort-icon{
+    height:8px;
+    width:8px;
+    cursor:pointer;
+}
+.head-sort-icon:hover{
+    color:darkgray;
+}
+.sort-active{
+    color:red;
+}
